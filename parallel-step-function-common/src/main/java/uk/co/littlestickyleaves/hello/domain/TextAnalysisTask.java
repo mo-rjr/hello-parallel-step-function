@@ -1,0 +1,24 @@
+package uk.co.littlestickyleaves.hello.domain;
+
+/**
+ * {A thing} to {do something} for {another thing}
+ * -- for example, {this}
+ * -- and also {this}
+ */
+// TODO fill in Javadoc
+public class TextAnalysisTask {
+
+    private String url;
+
+    public TextAnalysisTask(String url) {
+        this.url = url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+}
