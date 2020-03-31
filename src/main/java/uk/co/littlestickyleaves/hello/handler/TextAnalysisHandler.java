@@ -1,4 +1,4 @@
-package uk.co.littlestickyleaves.hello;
+package uk.co.littlestickyleaves.hello.handler;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -42,6 +42,7 @@ public class TextAnalysisHandler implements RequestHandler<TextAnalysisTask, Tex
                     .map(line -> line.replaceAll("[^a-zA-Z]", ""))
                     .map(String::toLowerCase)
                     .flatMap(line -> Arrays.stream(line.split("")))
+                    .filter(character -> !character.isEmpty())
                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
             return new TextAnalysisResult(frequenciesOfLetters);
         } catch (IOException e) {

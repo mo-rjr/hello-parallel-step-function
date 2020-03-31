@@ -11,24 +11,24 @@ import java.util.List;
 // TODO fill in Javadoc
 public class Instruction {
 
-    private List<String> testUrls = new ArrayList<>();
+    private List<String> textUrls = new ArrayList<>();
 
     public Instruction() {
     }
 
-    public Instruction(List<String> testUrls) {
-        this.testUrls = testUrls;
+    public Instruction(List<String> textUrls) {
+        this.textUrls = textUrls;
     }
 
     public void addUrl(String url) {
-        testUrls.add(url);
+        textUrls.add(url);
     }
 
-    public void setTestUrls(List<String> testUrls) {
-        this.testUrls = testUrls;
+    public void setTextUrls(List<String> textUrls) {
+        this.textUrls = textUrls;
     }
 
-    public List<String> getTestUrls() {
-        return testUrls;
+    public List<String> getTextUrls() {
+        return textUrls;
     }
 }

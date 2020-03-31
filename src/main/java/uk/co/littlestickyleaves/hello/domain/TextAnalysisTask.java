@@ -10,6 +10,9 @@ public class TextAnalysisTask {
 
     private String url;
 
+    public TextAnalysisTask() {
+    }
+
     public TextAnalysisTask(String url) {
         this.url = url;
     }

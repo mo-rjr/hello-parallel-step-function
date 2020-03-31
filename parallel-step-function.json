@@ -1,0 +1,30 @@
+{
+  "Comment": "A State machine for analysing the character counts in text files",
+  "StartAt": "InstructionReceiver",
+  "States": {
+    "InstructionReceiver": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-2:998292383020:function:rjr-instruction-handler",
+      "Next": "TextAnalysisIterator"
+    },
+    "TextAnalysisIterator": {
+      "Type": "Map",
+      "Iterator": {
+        "StartAt": "TextAnalyzer",
+        "States": {
+          "TextAnalyzer": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:eu-west-2:998292383020:function:rjr-text-handler",
+            "End": true
+          }
+        }
+      },
+      "Next": "ResultSummariser"
+    },
+    "ResultSummariser": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-2:998292383020:function:rjr-result-summariser",
+      "End": true
+    }
+  }
+}

@@ -6,14 +6,8 @@
 
     <groupId>uk.co.littlestickyleaves.hello</groupId>
     <artifactId>hello-parallel-step-function</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>instruction-receiver</module>
-        <module>text-analyzer</module>
-        <module>result-summariser</module>
-        <module>parallel-step-function-common</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
