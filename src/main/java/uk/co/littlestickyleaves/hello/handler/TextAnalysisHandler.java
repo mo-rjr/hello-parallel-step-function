@@ -3,8 +3,7 @@ package uk.co.littlestickyleaves.hello.handler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import uk.co.littlestickyleaves.hello.domain.TextAnalysisResult;
-import uk.co.littlestickyleaves.hello.domain.TextAnalysisTask;
+import uk.co.littlestickyleaves.hello.domain.TextAnalysisInstruction;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,24 +26,25 @@ import java.util.stream.Collectors;
  * -- and also {this}
  */
 // TODO fill in Javadoc
-public class TextAnalysisHandler implements RequestHandler<TextAnalysisTask, TextAnalysisResult> {
+public class TextAnalysisHandler implements RequestHandler<TextAnalysisInstruction, Map<String, Long>> {
 
     private static HttpClient HTTP_CLIENT = null;
 
     @Override
-    public TextAnalysisResult handleRequest(TextAnalysisTask textAnalysisTask, Context context) {
+    public Map<String, Long> handleRequest(TextAnalysisInstruction textAnalysisInstruction, Context context) {
         LambdaLogger logger = context.getLogger();
+
+        logger.log("Run id: " + textAnalysisInstruction.getId() + ", url: " + textAnalysisInstruction.getUrl());
         setUpClientIfRequired(logger);
 
-        try (InputStream inputStream = getUrlAsInputStream(textAnalysisTask.getUrl());
+        try (InputStream inputStream = getUrlAsInputStream(textAnalysisInstruction.getUrl());
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            Map<String, Long> frequenciesOfLetters = bufferedReader.lines()
+            return bufferedReader.lines()
                     .map(line -> line.replaceAll("[^a-zA-Z]", ""))
                     .map(String::toLowerCase)
                     .flatMap(line -> Arrays.stream(line.split("")))
                     .filter(character -> !character.isEmpty())
                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-            return new TextAnalysisResult(frequenciesOfLetters);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

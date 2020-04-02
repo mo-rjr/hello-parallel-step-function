@@ -2,8 +2,8 @@ package uk.co.littlestickyleaves.hello.handler;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import uk.co.littlestickyleaves.hello.domain.SummaryInput;
 import uk.co.littlestickyleaves.hello.domain.SystemOutput;
-import uk.co.littlestickyleaves.hello.domain.TextAnalysisResult;
 
 import java.util.Comparator;
 import java.util.List;
@@ -13,15 +13,16 @@ import java.util.stream.Collectors;
 /**
  * Takes in a number of TextAnalysisResults and summarises them
  */
-public class ResultSummaryHandler implements RequestHandler<List<TextAnalysisResult>, SystemOutput> {
+public class ResultSummaryHandler implements RequestHandler<SummaryInput, SystemOutput> {
 
     @Override
-    public SystemOutput handleRequest(List<TextAnalysisResult> textAnalysisResults, Context context) {
+    public SystemOutput handleRequest(SummaryInput summaryInput, Context context) {
+        String id = summaryInput.getId();
+        List<Map<String, Long>> textAnalysisResults = summaryInput.getResults();
         Map<String, Long> combinedFrequencies = textAnalysisResults.stream()
-                .map(TextAnalysisResult::getFrequencies)
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingLong(Map.Entry::getValue)));
-        String result = "Combined letter frequencies from " + textAnalysisResults.size() + " input" +
+        String result = id + ": Combined letter frequencies from " + textAnalysisResults.size() + " input" +
                 (textAnalysisResults.size() == 1 ? " " : "s ")  + "are: " +
                 frequencyMapAsString(combinedFrequencies);
         context.getLogger().log(result + "\n");

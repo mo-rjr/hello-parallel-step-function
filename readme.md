@@ -8,24 +8,24 @@ in text read from URLs.
 
 ### InstructionHandler
 Receives an `Instruction` object, which is a list of URLs.
-See `trollope-instructions.json` for an example. 
-It turns each URL into a `TextAnalysisTask` and returns them as an array.
+See `trollope-instructions.json` and `patristics.json` examples. 
+It returns an `InstructionBreakdown` which has an id and the urls as an array.
 
 ### TextAnalysisHandler
-Receives a `TextAnalysisTask` object. 
+Receives a `TextAnalysisInstruction` object. 
 Visits the specified URL and extracts the frequencies of each letter. 
-Returns a `TextAnalysisResult` object which contains those frequencies.
+Returns a ` Map<String, Long>` which contains those frequencies.
 
 ### ResultSummaryHandler
-Receives an array of `TextAnalysisResult` objects. 
+Receives a `SummaryInput` which has the id and an array of the `TextAnalysisHandler` results. 
 Concatenates and outputs the combined the frequencies.
  
 ## Step Function / State Machine
-Defined in `parallel-step-function.json`. 
-Links the three lambdas so that the `TextAnalysisHandler` is called in parallel,
-one invocation for each `TextAnalysisTask` produced by the `InstructionHandler`. 
-Then combines the resulting `TextAnalysisResult` objects into an array 
-and sends them to the `ResultSummaryHandler`.
+That Step Function that links the three lambdas is defined in `parallel-step-function.json`.
+`InstructionHandler` generates a random id for the execution and outputs it with the urls.
+The Step Function sends the id and one url to multiple invocations of the `TextAnalysisHandler`. 
+It then concatenates the results of the invocations 
+and sends them with the execution id to the `ResultSummaryHandler`.
 
 ## Deployment
 At present deployment is a manual process.

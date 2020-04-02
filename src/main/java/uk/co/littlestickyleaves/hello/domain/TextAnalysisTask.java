@@ -6,6 +6,7 @@ package uk.co.littlestickyleaves.hello.domain;
  * -- and also {this}
  */
 // TODO fill in Javadoc
+@Deprecated
 public class TextAnalysisTask {
 
     private String url;

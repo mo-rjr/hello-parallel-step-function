@@ -9,6 +9,13 @@
     },
     "TextAnalysisIterator": {
       "Type": "Map",
+      "ItemsPath": "$.urls",
+      "Parameters": {
+        "id.$": "$.run.id",
+        "url.$": "$$.Map.Item.Value"
+      },
+      "OutputPath": "$.run",
+      "ResultPath": "$.run.results",
       "Iterator": {
         "StartAt": "TextAnalyzer",
         "States": {

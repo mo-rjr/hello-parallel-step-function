@@ -8,6 +8,7 @@ import java.util.Map;
  * -- and also {this}
  */
 // TODO fill in Javadoc
+@Deprecated
 public class TextAnalysisResult {
 
     private Map<String, Long> frequencies;
