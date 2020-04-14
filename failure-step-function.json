@@ -1,0 +1,45 @@
+{
+  "Comment": "A State machine for looking at Step Function error-handling",
+  "StartAt": "FirstStep",
+  "States": {
+    "FirstStep": {
+      "Type": "Pass",
+      "Next": "RiskyStep"
+    },
+    "RiskyStep": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-2:998292383020:function:rjr-result-summariser",
+      "TimeoutSeconds": 15,
+      "Retry": [
+        {
+          "ErrorEquals" : ["uk.co.littlestickyleaves.hello.fails.RetryableException"],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }, {
+          "ErrorEquals" : ["Lambda.Unknown", "States.Timeout"],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 1,
+          "BackoffRate": 1.0
+        }
+      ],
+      "Catch": [ {
+        "ErrorEquals": ["java.lang.RuntimeException"],
+        "Next": "RuntimeExceptionFlagging",
+        "ResultPath": "$.catch"
+      }],
+      "End": true
+    },
+    "RuntimeExceptionFlagging": {
+      "Comment": "This could do something with this unexpected exception",
+      "Type": "Pass",
+      "Parameters": {
+        "failureInstruction.$": "$.failureInstruction",
+        "errorInformation.$": "$.catch",
+        "executionInformation.$": "$$.Execution",
+        "stateMachineInformation.$": "$$.StateMachine"
+      },
+      "End": true
+    }
+  }
+}
