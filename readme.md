@@ -38,3 +38,14 @@ At present deployment is a manual process.
 but with each arn replaced by the arn of your corresponding lambda deployment
   * it will require a role that has permission to call lambdas
 * trigger the step function with suitable json, e.g. `trollope-instructions.json`
+
+## Additional failure example
+If the zip is deployed as a lambda with the handler:  
+`uk.co.littlestickyleaves.hello.fails.RandomFailingHandler::handleRequest`  
+then it will fail as directed.  The step function json is  
+`failure-step-function.json`.  
+It retries or catches failures according to their type.
+
+It takes an instruction like  
+`{ "failureType": "RANDOM" }`  
+where available failure types are "RANDOM", "TIMEOUT", "CUSTOM", "RUNTIME", and "NONE".
